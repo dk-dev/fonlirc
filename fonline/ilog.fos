@@ -1,0 +1,15 @@
+string ILogDir = "/path/to/log/dir";
+
+void ILog( string& type, string& message )
+{
+    if( ILogDir.length() == 0 || type.length() == 0 || text.length() == 0 )
+	return;
+    string filename = ILogDir + "/" + type + "." + __FullSecond;
+
+    file ilog;
+    if( ilog.open( filename, "a" ) >= 0 )
+    {
+	ilog.writeString( message + "\n" );
+	ilog.close();
+    }
+}
