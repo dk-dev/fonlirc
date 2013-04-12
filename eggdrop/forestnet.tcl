@@ -28,12 +28,11 @@
 #
 ###
 
-package provide forestnet 0.4;
+package provide eggdrop-forestnet 0.4;
 
 bind notc S * forestnet:message
 bind need - * forestnet:need
 bind raw - 432 forestnet:432
-
 array set forestnet {
     password ""
 };
@@ -43,8 +42,7 @@ array set forestnet-channels {};
 # don't use PRIVMSG to communicate with services; 
 
 proc forestnet:message {nick uhost handle text dest} {
-    global forestnet;
-    global forestnet-channels;
+    global forestnet forestnet-channels;
 
     set text [stripcodes * $text];
 
@@ -83,6 +81,9 @@ proc forestnet:message {nick uhost handle text dest} {
 	    if { $access > 0 } {
 		putlog "#ForestNet#   $channel -> $xop ($access)";
 		set forestnet-channels($lchannel) $access;
+		if { [validchan $channel] && ![channel get $channel inactive] && [botonchan $channel] } {
+		    forestnet:need $channel op;
+		}
 	    } else {
 		putlog "#ForestNet# Unknown ALIST entry : $text";
 	    }
@@ -154,12 +155,12 @@ proc forestnet:need { channel type } {
 
 	if { $type == "op" && [botonchan $channel] } {
 	    if { $access >= 3 && ![botisop $channel] } {
-		putlog "#ForestNet# Requesting OP: $channel";
-		putserv "CHANSERV :OP $channel";
 		if { $access >= 4 } {
 		    putlog "#ForestNet# Requesting PROTECT: $channel";
 		    putserv "CHANSERV :PROTECT $channel";
 		}
+		putlog "#ForestNet# Requesting OP: $channel";
+		putserv "CHANSERV :OP $channel";
 		return 1;
 	    } elseif { $access >= 2 && ![botisop $channel] && ![botishalfop $channel] } {
 		putlog "#ForestNet# Requesting HALFOP: $channel";

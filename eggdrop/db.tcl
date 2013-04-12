@@ -7,7 +7,7 @@
 #
 ###
 
-package provide db 0.1;
+package provide eggdrop-db 0.1;
 
 proc db:get { fname var } {
     set var [string tolower $var];

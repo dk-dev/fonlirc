@@ -26,7 +26,7 @@
 #
 ###
 
-package provide librarian 0.1;
+package provide eggdrop-librarian 0.1;
 
 setudef flag librarian
 

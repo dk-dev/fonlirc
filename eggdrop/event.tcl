@@ -23,7 +23,7 @@
 #
 ###
 
-package provide event 0.1;
+package provide eggdrop-event 0.1;
 
 array set event {};
 
